@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 테스트</title>
+</head>
+<body>
+<h2>회원가입</h2>
+<input id="signupEmail" placeholder="이메일"><br>
+<input id="signupPassword" type="password" placeholder="비밀번호"><br>
+<input id="signupNickname" placeholder="닉네임"><br>
+<button onclick="signup()">회원가입</button>
+
+<hr>
+
+<h2>로그인</h2>
+<input id="email" placeholder="이메일"><br>
+<input id="password" type="password" placeholder="비밀번호"><br>
+<button onclick="login()">로그인</button>
+<button onclick="checkSession()">세션 확인</button>
+<button onclick="logout()">로그아웃</button>
+
+<hr>
+
+<h2>내 정보 보기</h2>
+<button onclick="getInfo()">정보 조회</button>
+
+<hr>
+
+<h2>회원정보 수정</h2>
+<input id="updateNickname" placeholder="새 닉네임"><br>
+<input id="updatePassword" type="password" placeholder="새 비밀번호"><br>
+<button onclick="updateMember()">정보 수정</button>
+
+<hr>
+
+<h2>회원 탈퇴</h2>
+<button onclick="deleteMember()">탈퇴하기</button>
+
+<p id="result"></p>
+
+<script>
+    const BASE_URL = "http://localhost:8080/api/member";
+
+    async function signup() {
+        const email = document.getElementById("signupEmail").value;
+        const password = document.getElementById("signupPassword").value;
+        const nickname = document.getElementById("signupNickname").value;
+
+        const res = await fetch(`${BASE_URL}/signup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password, nickname })
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+
+    async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const res = await fetch(`${BASE_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password })
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+
+    async function checkSession() {
+        const res = await fetch(`${BASE_URL}/check`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+
+    async function logout() {
+        const res = await fetch(`${BASE_URL}/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+
+    async function getInfo() {
+        const res = await fetch(`${BASE_URL}/info`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (res.ok) {
+            const data = await res.json();   // JSON으로 응답오니 다르게 처리
+            document.getElementById("result").innerText =
+                `memberId: ${data.memberId}, email: ${data.email}, nickname: ${data.nickname}`;
+        } else {
+            document.getElementById("result").innerText = await res.text();
+        }
+    }
+
+    async function updateMember() {
+        const nickname = document.getElementById("updateNickname").value;
+        const password = document.getElementById("updatePassword").value;
+
+        const res = await fetch(`${BASE_URL}/update`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ nickname, password })
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+
+    async function deleteMember() {
+        const res = await fetch(`${BASE_URL}/delete`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+</script>
+</body>
+</html>
