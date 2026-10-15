@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springboard.mapper.BoardMapper">
+
+
+    <insert id="save" parameterType="com.example.springboard.entity.Member" useGeneratedKeys="true" keyProperty="memberId">
+        INSERT INTO member (email,password,nickname,createdAt)
+        VALUES (#{email}, #{password}, #{nickname}, NOW());
+    </insert>
+
+    <select id="findByEmail" resultType="com.example.springboard.entity.Member">
+        SELECT member_id, email, password, nickname, created_at
+        FROM member
+        WHERE email = #{email}
+    </select>
+
+    <select id="findByNickname" resultType="com.example.springboard.entity.Member">
+        SELECT member_id, email, password, nickname, created_at
+        FROM member
+        WHERE nickname = #{nickname}
+    </select>
+
+</mapper>
