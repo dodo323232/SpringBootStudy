@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 
 @Mapper
-public interface BoardMapper {
+public interface MemberMapper {
     public void save(Member member);
 
     public Member findByEmail(String email);

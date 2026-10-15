@@ -3,7 +3,7 @@ package com.example.springboard.service;
 import com.example.springboard.dto.LoginDto;
 import com.example.springboard.dto.SignUpDto;
 import com.example.springboard.entity.Member;
-import com.example.springboard.mapper.BoardMapper;
+import com.example.springboard.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
-    private final BoardMapper mapper;
+    private final MemberMapper mapper;
 
     public Long signUp(SignUpDto signUpDto){
 
@@ -39,7 +39,7 @@ public class MemberService {
     }
 
     public Long login(LoginDto dto){
-        if(mapper.findByEmail(dto.getEmail()) != null){
+        if(mapper.findByEmail(dto.getEmail()) == null){
             throw new IllegalArgumentException("이메일이나 비밀번호가 틀렸습니다.");
         }
 

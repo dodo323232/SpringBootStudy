@@ -3,6 +3,8 @@ package com.example.springboard.controller;
 import com.example.springboard.dto.LoginDto;
 import com.example.springboard.dto.SignUpDto;
 import com.example.springboard.service.MemberService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/board")
+@RequestMapping("/api/member")
 @RequiredArgsConstructor
-public class BoardController {
+public class MemberController {
 
     private final MemberService service;
 
@@ -25,9 +27,17 @@ public class BoardController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
-        Long createId = service.login(loginDto);
+    public ResponseEntity<String> login(
+            @RequestBody LoginDto loginDto,
+            HttpServletRequest request
+    ){
+        Long memberId = service.login(loginDto);
 
-        return ResponseEntity.ok(createId+"번 로그인 완료.");
+        HttpSession session = request.getSession();
+        session.setAttribute("memberId",memberId);
+
+        return ResponseEntity.ok(memberId+"번 로그인 완료."+session);
     }
+
+
 }

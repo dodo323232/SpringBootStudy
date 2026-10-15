@@ -1,0 +1,11 @@
+CREATE database board_db;
+
+USE board_db;
+
+CREATE TABLE member(
+	member_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    nickname VARCHAR(50) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)
