@@ -23,4 +23,10 @@
         WHERE nickname = #{nickname}
     </select>
 
+    <select id="findById" resultType="com.example.springboard.entity.Member">
+        SELECT member_id, email, password, nickname, created_at
+        FROM member
+        WHERE member_id = #{memberId}
+    </select>
+
 </mapper>

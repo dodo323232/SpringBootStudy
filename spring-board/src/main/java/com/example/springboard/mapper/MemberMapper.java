@@ -9,4 +9,5 @@ public interface MemberMapper {
 
     public Member findByEmail(String email);
     public Member findByNickname(String nickname);
+    public Member findById(Long memberId);
 }

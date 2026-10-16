@@ -1,5 +1,6 @@
 package com.example.springboard.service;
 
+import com.example.springboard.dto.MemberResponseDto;
 import com.example.springboard.dto.LoginDto;
 import com.example.springboard.dto.SignUpDto;
 import com.example.springboard.entity.Member;
@@ -25,11 +26,11 @@ public class MemberService {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
 
-        String encodedPaswword = passwordEncoder.encode(signUpDto.getPassword());
+        String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
 
         Member member = Member.builder()
                 .email(signUpDto.getEmail())
-                .password(encodedPaswword)
+                .password(encodedPassword)
                 .nickname(signUpDto.getNickname())
                 .build();
 
@@ -55,7 +56,12 @@ public class MemberService {
         return member.getMemberId();
     }
 
+    public MemberResponseDto info(Long memberId){
+        Member member = mapper.findById(memberId);
 
+        return new MemberResponseDto(member);
+    }
 
+    
 
 }
