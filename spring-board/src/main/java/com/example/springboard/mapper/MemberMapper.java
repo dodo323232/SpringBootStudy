@@ -6,8 +6,10 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface MemberMapper {
     public void save(Member member);
+    public void memberUpdate(Long memberId, String nickname, String password);
 
     public Member findByEmail(String email);
     public Member findByNickname(String nickname);
     public Member findById(Long memberId);
+
 }

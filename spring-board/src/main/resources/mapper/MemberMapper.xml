@@ -11,6 +11,16 @@
         VALUES (#{email}, #{password}, #{nickname}, NOW());
     </insert>
 
+
+    <update id="memberUpdate">
+        UPDATE member
+        SET nickname = #{nickname},
+        password = #{password}
+        WHERE member_id = #{memberId}
+    </update>
+
+
+
     <select id="findByEmail" resultType="com.example.springboard.entity.Member">
         SELECT member_id, email, password, nickname, created_at
         FROM member

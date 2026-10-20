@@ -1,4 +1,4 @@
-package com.example.springboard.dto;
+package com.example.springboard.dto.memberDto;
 
 import lombok.Data;
 

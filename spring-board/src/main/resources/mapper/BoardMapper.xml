@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.springboard.mapper.MemberMapper">
+
+
+    <insert id="save" parameterType="com.example.springboard.entity.Board" useGeneratedKeys="true" keyProperty="boardId">
+        INSERT INTO board (member_id, title, content, created_at)
+        VALUES (#{memberId}, #{title}, #{content}, NOW());
+    </insert>
+
+
+</mapper>

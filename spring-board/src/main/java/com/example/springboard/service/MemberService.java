@@ -1,8 +1,8 @@
 package com.example.springboard.service;
 
-import com.example.springboard.dto.MemberResponseDto;
-import com.example.springboard.dto.LoginDto;
-import com.example.springboard.dto.SignUpDto;
+import com.example.springboard.dto.memberDto.MemberResponseDto;
+import com.example.springboard.dto.memberDto.LoginDto;
+import com.example.springboard.dto.memberDto.SignUpDto;
 import com.example.springboard.entity.Member;
 import com.example.springboard.mapper.MemberMapper;
 import lombok.RequiredArgsConstructor;
@@ -60,6 +60,13 @@ public class MemberService {
         Member member = mapper.findById(memberId);
 
         return new MemberResponseDto(member);
+    }
+
+    public void memberUpdate(Long memberId, String newNick, String newPassword){
+
+        String encodedPassword = passwordEncoder.encode(newPassword);
+
+        mapper.memberUpdate(memberId, newNick, encodedPassword);
     }
 
     

@@ -1,8 +1,10 @@
 package com.example.springboard.controller;
 
-import com.example.springboard.dto.LoginDto;
-import com.example.springboard.dto.MemberResponseDto;
-import com.example.springboard.dto.SignUpDto;
+import com.example.springboard.Util.SessionUtil;
+import com.example.springboard.dto.memberDto.LoginDto;
+import com.example.springboard.dto.memberDto.MemberResponseDto;
+import com.example.springboard.dto.memberDto.SignUpDto;
+import com.example.springboard.dto.memberDto.UpdateDto;
 import com.example.springboard.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService service;
+    private final SessionUtil sessionUtil;
 
     @PostMapping("/signup")
     public ResponseEntity<String> signUP(@RequestBody SignUpDto signUpDto){
@@ -39,6 +42,15 @@ public class MemberController {
         return ResponseEntity.ok(memberId+"번 로그인 완료."+session);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<String> memberUpdate(HttpServletRequest request, @RequestBody UpdateDto dto){
+        Long memberId = sessionUtil.getLoginMemberId(request);
+
+        service.memberUpdate(memberId, dto.getNickname(), dto.getPassword());
+
+        return ResponseEntity.ok(memberId+"번 정보 갱신 완료.");
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request){
 
@@ -56,20 +68,22 @@ public class MemberController {
     @GetMapping("/info")
     public ResponseEntity<MemberResponseDto> memberInfo(HttpServletRequest request){
 
-        Long memberId = getLoginMemberId(request);
+        Long memberId = sessionUtil.getLoginMemberId(request);
 
         MemberResponseDto dto = service.info(memberId);
 
         return ResponseEntity.ok(dto);
     }
 
-    private Long getLoginMemberId(HttpServletRequest request){
 
-        HttpSession session = request.getSession(false);
-        if(session == null) {
-            throw new IllegalStateException("로그인이 필요합니다");
-        }
 
-        return (Long) session.getAttribute("memberId");
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<String> handlerIllegalState(IllegalStateException e){
+        return ResponseEntity.status(401).body(e.getMessage());
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handlerIllegalArgument(IllegalArgumentException e){
+        return ResponseEntity.status(400).body(e.getMessage());
     }
 }
