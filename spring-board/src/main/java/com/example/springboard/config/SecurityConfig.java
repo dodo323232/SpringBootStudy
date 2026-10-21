@@ -29,6 +29,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .httpBasic(basic -> basic.disable())
                 .formLogin(form -> form.disable());
+                // 나중에 spring security로 로그인 만들기하셈
         return http.build();
     }
 

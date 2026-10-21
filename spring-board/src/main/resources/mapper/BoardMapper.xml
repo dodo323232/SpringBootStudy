@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.example.springboard.mapper.MemberMapper">
+<mapper namespace="com.example.springboard.mapper.BoardMapper">
 
 
     <insert id="save" parameterType="com.example.springboard.entity.Board" useGeneratedKeys="true" keyProperty="boardId">
@@ -11,5 +11,24 @@
         VALUES (#{memberId}, #{title}, #{content}, NOW());
     </insert>
 
+    <select id="findByMemberId" resultType="com.example.springboard.dto.boardDto.BoardResponseDto">
+        SELECT b.board_id, b.title, b.content, m.nickname
+        FROM board b
+        JOIN member m ON b.member_id = m.member_id
+        WHERE b.member_id = #{memberId};
+    </select>
 
+    <update id="updateBoard">
+        UPDATE board
+        SET title = #{title},
+        content = #{content}
+        WHERE member_id = #{memberId}
+        AND board_id = #{boardId}
+    </update>
+
+    <delete id="deleteBoard">
+        DELETE FROM board
+        WHERE member_id = #{memberId}
+        AND board_id = #{boardId}
+    </delete>
 </mapper>
