@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>로그인</title>
+</head>
+<body>
+<h2>회원가입</h2>
+<input id="signupEmail" placeholder="이메일"><br>
+<input id="signupPassword" type="password" placeholder="비밀번호"><br>
+<input id="signupNickname" placeholder="닉네임"><br>
+<button onclick="signup()">회원가입</button>
+
+<hr>
+
+<h2>로그인</h2>
+<input id="email" placeholder="이메일"><br>
+<input id="password" type="password" placeholder="비밀번호"><br>
+<button onclick="login()">로그인</button>
+
+<p id="result"></p>
+
+<script>
+    const BASE_URL = "/api/member";
+
+    async function signup() {
+        const email = document.getElementById("signupEmail").value;
+        const password = document.getElementById("signupPassword").value;
+        const nickname = document.getElementById("signupNickname").value;
+
+        const res = await fetch(`${BASE_URL}/signup`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password, nickname })
+        });
+
+        document.getElementById("result").innerText = await res.text();
+    }
+
+    async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        const res = await fetch(`${BASE_URL}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email, password })
+        });
+
+        if (res.ok) {
+            location.href = "board.html";   // 성공하면 게시판으로 이동
+        } else {
+            document.getElementById("result").innerText = await res.text();
+        }
+    }
+</script>
+</body>
+</html>

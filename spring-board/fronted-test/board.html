@@ -23,15 +23,15 @@
 <p id="result"></p>
 
 <script>
-    const MEMBER_URL = "http://localhost:8080/api/member";
-    const BOARD_URL = "http://localhost:8080/api/board";
+    const MEMBER_URL = "http://192.168.142.132:8080/api/member";
+    const BOARD_URL = "http://192.168.142.132:8080/api/board";
 
     // 페이지가 열리면 로그인 확인 후 목록 불러오기
     async function init() {
         const res = await fetch(`${MEMBER_URL}/info`, { credentials: "include" });
         if (!res.ok) {
-            location.href = "login.html";   // 로그인 안 됐으면 쫓아냄
-            return;
+            location.href = "login.html";  // 로그인 안 됐으면 쫓아냄
+            return; 
         }
         const member = await res.json();
         document.getElementById("welcome").innerText = `- ${member.nickname}님`;

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+<h2>게시판 <span id="welcome"></span></h2>
+<button onclick="logout()">로그아웃</button>
+
+<hr>
+
+<h3>글쓰기</h3>
+<input id="boardTitle" placeholder="제목"><br>
+<textarea id="boardContent" placeholder="내용" rows="4" cols="40"></textarea><br>
+<button onclick="saveBoard()">글 등록</button>
+
+<hr>
+
+<h3>내 글 목록</h3>
+<div id="boardList"></div>
+
+<p id="result"></p>
+
+<script>
+    const MEMBER_URL = "/api/member";
+    const BOARD_URL = "/api/board";
+
+    // 페이지가 열리면 로그인 확인 후 목록 불러오기
+    async function init() {
+        const res = await fetch(`${MEMBER_URL}/info`, { credentials: "include" });
+        if (!res.ok) {
+            location.href = "login.html";  // 로그인 안 됐으면 쫓아냄
+            return;
+        }
+        const member = await res.json();
+        document.getElementById("welcome").innerText = `- ${member.nickname}님`;
+        loadBoards();
+    }
+
+    async function saveBoard() {
+        const title = document.getElementById("boardTitle").value;
+        const content = document.getElementById("boardContent").value;
+
+        const res = await fetch(`${BOARD_URL}/save`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ title, content })
+        });
+
+        document.getElementById("result").innerText = await res.text();
+        if (res.ok) {
+            document.getElementById("boardTitle").value = "";
+            document.getElementById("boardContent").value = "";
+            loadBoards();
+        }
+    }
+
+    async function loadBoards() {
+        const res = await fetch(`${BOARD_URL}/read`, { credentials: "include" });
+        if (!res.ok) {
+            document.getElementById("result").innerText = await res.text();
+            return;
+        }
+
+        const boards = await res.json();
+        const listDiv = document.getElementById("boardList");
+        listDiv.innerHTML = "";
+
+        boards.forEach(b => {
+            const item = document.createElement("div");
+            item.innerHTML = `
+                <p><b>${b.title}</b> (${b.nickname})<br>${b.content}</p>
+                <button onclick="editBoard(${b.boardId})">수정</button>
+                <button onclick="deleteBoard(${b.boardId})">삭제</button>
+                <hr>
+            `;
+            listDiv.appendChild(item);
+        });
+    }
+
+    async function editBoard(boardId) {
+        const title = prompt("새 제목");
+        if (title === null) return;
+        const content = prompt("새 내용");
+        if (content === null) return;
+
+        const res = await fetch(`${BOARD_URL}/update`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ boardId, title, content })
+        });
+
+        document.getElementById("result").innerText = await res.text();
+        loadBoards();
+    }
+
+    async function deleteBoard(boardId) {
+        if (!confirm("정말 삭제하시겠습니까?")) return;
+
+        const res = await fetch(`${BOARD_URL}/delete?boardId=${boardId}`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        document.getElementById("result").innerText = await res.text();
+        loadBoards();
+    }
+
+    async function logout() {
+        await fetch(`${MEMBER_URL}/logout`, {
+            method: "POST",
+            credentials: "include"
+        });
+        location.href = "login.html";
+    }
+
+    init();
+</script>
+</body>
+</html>
