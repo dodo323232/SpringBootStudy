@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>게시판 로그인 테스트</title>
+    <title>로그인</title>
 </head>
 <body>
 <h2>회원가입</h2>
@@ -17,8 +17,6 @@
 <input id="email" placeholder="이메일"><br>
 <input id="password" type="password" placeholder="비밀번호"><br>
 <button onclick="login()">로그인</button>
-<button onclick="checkSession()">세션 확인</button>
-<button onclick="logout()">로그아웃</button>
 
 <p id="result"></p>
 
@@ -51,25 +49,11 @@
             body: JSON.stringify({ email, password })
         });
 
-        document.getElementById("result").innerText = await res.text();
-    }
-
-    async function checkSession() {
-        const res = await fetch(`${BASE_URL}/info`, {
-            method: "GET",
-            credentials: "include"
-        });
-
-        document.getElementById("result").innerText = await res.text();
-    }
-
-    async function logout() {
-        const res = await fetch(`${BASE_URL}/logout`, {
-            method: "POST",
-            credentials: "include"
-        });
-
-        document.getElementById("result").innerText = await res.text();
+        if (res.ok) {
+            location.href = "board.html";   // 성공하면 게시판으로 이동
+        } else {
+            document.getElementById("result").innerText = await res.text();
+        }
     }
 </script>
 </body>

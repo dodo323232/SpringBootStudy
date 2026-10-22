@@ -18,13 +18,7 @@ public class MemberService {
 
     public Long signUp(SignUpDto signUpDto){
 
-        if(mapper.findByEmail(signUpDto.getEmail()) != null){
-            throw new IllegalArgumentException("이미 가입된 이메일입니다");
-        }
-
-        if(mapper.findByNickname(signUpDto.getNickname()) != null){
-            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
-        }
+        validateSignUp(signUpDto);
 
         String encodedPassword = passwordEncoder.encode(signUpDto.getPassword());
 
@@ -69,6 +63,25 @@ public class MemberService {
         mapper.memberUpdate(memberId, newNick, encodedPassword);
     }
 
-    
+
+
+    private void validateSignUp(SignUpDto signUpDto){
+        validateLength(signUpDto.getEmail(), 8, "이메일");
+        validateLength(signUpDto.getPassword(), 8, "비밀번호");
+
+        if(mapper.findByEmail(signUpDto.getEmail()) != null){
+            throw new IllegalArgumentException("이미 가입된 이메일입니다");
+        }
+
+        if(mapper.findByNickname(signUpDto.getNickname()) != null){
+            throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
+        }
+    }
+
+    private void validateLength(String value, int min, String fieldName){
+        if(value == null || value.length() < min){
+            throw new IllegalArgumentException(fieldName+"은(는) "+min+"글자 이상이어야 합니다.");
+        }
+    }
 
 }
