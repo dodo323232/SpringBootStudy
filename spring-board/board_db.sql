@@ -8,4 +8,6 @@ CREATE TABLE member(
     password VARCHAR(255) NOT NULL,
     nickname VARCHAR(50) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-)
+);
+
+SELECT * FROM member;
