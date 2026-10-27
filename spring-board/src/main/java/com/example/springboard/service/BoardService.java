@@ -37,6 +37,10 @@ public class BoardService {
         boardMapper.updateBoard(dto.getBoardId(), memberId, dto.getTitle(), dto.getContent());
     }
 
+    public List<BoardResponseDto> readAllBoard(){
+        return boardMapper.findAllBoard();
+    }
+
     public void deleteBoard(Long boardId, Long memberId){
 
         boardMapper.deleteBoard(boardId,memberId);

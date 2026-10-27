@@ -43,6 +43,11 @@ public class BoardController {
         return ResponseEntity.ok(List);
     }
 
+    @GetMapping("/board-response")
+    public ResponseEntity<List<BoardResponseDto>> responseBoard(){
+        return ResponseEntity.ok(service.readAllBoard());
+    }
+
     @PutMapping("/update")
     public ResponseEntity<String> updateBoard(
             @RequestBody BoardUpdateDto dto,

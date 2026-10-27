@@ -1,7 +1,6 @@
 package com.example.springboard.mapper;
 
 import com.example.springboard.dto.boardDto.BoardResponseDto;
-import com.example.springboard.dto.boardDto.BoardUpdateDto;
 import com.example.springboard.entity.Board;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,5 +20,7 @@ public interface BoardMapper {
        public void deleteBoard(Long boardId, Long memberId);
 
        public List<BoardResponseDto> findByMemberId(Long memberId);
+
+       public List<BoardResponseDto> findAllBoard();
 
 }
