@@ -20,18 +20,6 @@ public class BoardController {
     private final BoardService service;
     private final SessionUtil sessionUtil;
 
-    @PostMapping("/save")
-    public ResponseEntity<String> saveBoard(
-            @RequestBody BoardSaveDto dto,
-            HttpServletRequest request
-    ){
-        Long memberId =  sessionUtil.getLoginMemberId(request);
-
-        Long boardId = service.saveBoard(memberId, dto.getTitle(), dto.getContent());
-
-        return ResponseEntity.ok(boardId+"번 게시물 생성");
-    }
-
     @GetMapping("/read")
     public ResponseEntity<List<BoardResponseDto>> readBoard(
             HttpServletRequest request
@@ -46,6 +34,21 @@ public class BoardController {
     @GetMapping("/board-response")
     public ResponseEntity<List<BoardResponseDto>> responseBoard(){
         return ResponseEntity.ok(service.readAllBoard());
+    }
+
+    @PostMapping("/{boardId}/comment")
+    public ResponseEntity<List<BoardResponseDto>>
+
+    @PostMapping("/save")
+    public ResponseEntity<String> saveBoard(
+            @RequestBody BoardSaveDto dto,
+            HttpServletRequest request
+    ){
+        Long memberId =  sessionUtil.getLoginMemberId(request);
+
+        Long boardId = service.saveBoard(memberId, dto.getTitle(), dto.getContent());
+
+        return ResponseEntity.ok(boardId+"번 게시물 생성");
     }
 
     @PutMapping("/update")
