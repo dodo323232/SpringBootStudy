@@ -36,8 +36,7 @@ public class BoardController {
         return ResponseEntity.ok(service.readAllBoard());
     }
 
-    @PostMapping("/{boardId}/comment")
-    public ResponseEntity<List<BoardResponseDto>>
+
 
     @PostMapping("/save")
     public ResponseEntity<String> saveBoard(

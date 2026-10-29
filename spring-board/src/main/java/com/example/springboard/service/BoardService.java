@@ -14,7 +14,7 @@ import java.util.List;
 public class BoardService {
 
     private final BoardMapper boardMapper;
-
+    
     public Long saveBoard(Long memberId, String title, String content){
         Board board = Board.builder()
                 .memberId(memberId)
