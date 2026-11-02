@@ -10,18 +10,19 @@
         VALUES (#{boardId}, #{memberId}, #{content}, NOW());
     </insert>
 
-    <select id="commentRead">
-        SELECT content
-        FROM comment
-        WHERE member_id = #{memberId}
+    <select id="commentRead" resultType="com.example.springboard.dto.commentDto.CommentResponseDto">
+        SELECT b.title AS boardTitle, b.content AS boardContent, c.content AS commentContent
+        FROM comment c
+        JOIN board b ON b.board_id = c.board_id
+        WHERE c.member_id = #{memberId}
     </select>
 
     <update id="commentUpdate">
         UPDATE comment
         SET content = #{content}
         WHERE member_id = #{memberId}
-        AND board_id = #{boardId}
-        AND comment_id = #{commentId}
+        AND c.board_id = #{boardId}
+        AND c.comment_id = #{commentId}
     </update>
 
 </mapper>

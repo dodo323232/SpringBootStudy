@@ -4,5 +4,7 @@ import lombok.Data;
 
 @Data
 public class CommentResponseDto {
-    private String content;
+    private String boardTitle;
+    private String boardContent;
+    private String commentContent;
 }
