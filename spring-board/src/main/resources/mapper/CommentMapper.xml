@@ -5,9 +5,23 @@
 
 <mapper namespace="com.example.springboard.mapper.CommentMapper">
 
-    <insert id="save" parameterType="com.example.springboard.entity.Comment" useGeneratedKeys="true" keyProperty="commentId">
+    <insert id="commentSave" parameterType="com.example.springboard.entity.Comment" useGeneratedKeys="true" keyProperty="commentId">
         INSERT INTO comment (board_id, member_id, content, created_at)
         VALUES (#{boardId}, #{memberId}, #{content}, NOW());
     </insert>
+
+    <select id="commentRead">
+        SELECT content
+        FROM comment
+        WHERE member_id = #{memberId}
+    </select>
+
+    <update id="commentUpdate">
+        UPDATE comment
+        SET content = #{content}
+        WHERE member_id = #{memberId}
+        AND board_id = #{boardId}
+        AND comment_id = #{commentId}
+    </update>
 
 </mapper>
